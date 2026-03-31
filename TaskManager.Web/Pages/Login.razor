@@ -1,0 +1,55 @@
+@page "/login"
+@inject TaskManager.Web.Services.AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>🗂️ TaskManager</h2>
+        <p class="subtitle">Entre na sua conta</p>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert-error">@errorMessage</div>
+        }
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" @bind="request.Email" placeholder="seu@email.com" />
+        </div>
+
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" @bind="request.Password" placeholder="••••••••" />
+        </div>
+
+        <button class="btn-primary" @onclick="HandleLogin" disabled="@isLoading">
+            @(isLoading ? "Entrando..." : "Entrar")
+        </button>
+
+        <p class="link-text">Não tem conta? <a href="/register">Cadastre-se</a></p>
+    </div>
+</div>
+
+@code {
+    private TaskManager.Web.Models.LoginRequest request = new();
+    private string errorMessage = string.Empty;
+    private bool isLoading = false;
+
+    protected override void OnInitialized()
+    {
+        if (AuthService.IsAuthenticated)
+            Nav.NavigateTo("/tasks");
+    }
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+        var success = await AuthService.LoginAsync(request);
+        if (success)
+            Nav.NavigateTo("/tasks");
+        else
+            errorMessage = "Email ou senha inválidos.";
+        isLoading = false;
+    }
+}

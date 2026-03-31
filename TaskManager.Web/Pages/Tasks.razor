@@ -1,0 +1,143 @@
+@page "/tasks"
+@inject TaskManager.Web.Services.AuthService AuthService
+@inject TaskManager.Web.Services.TaskService TaskService
+@inject NavigationManager Nav
+
+<div class="dashboard">
+    <header class="dashboard-header">
+        <h1>🗂️ TaskManager</h1>
+        <div class="header-right">
+            <span>Olá, <strong>@AuthService.UserName</strong></span>
+            <button class="btn-logout" @onclick="Logout">Sair</button>
+        </div>
+    </header>
+
+    <div class="dashboard-content">
+        <div class="task-form-card">
+            <h3>Nova Tarefa</h3>
+            <div class="form-group">
+                <input type="text" @bind="newTask.Title" placeholder="Título da tarefa" />
+            </div>
+            <div class="form-group">
+                <input type="text" @bind="newTask.Description" placeholder="Descrição (opcional)" />
+            </div>
+            <div class="form-row">
+                <select @bind="newTask.Priority">
+                    <option value="1">🟢 Baixa</option>
+                    <option value="2">🟡 Média</option>
+                    <option value="3">🔴 Alta</option>
+                </select>
+                <input type="date" @bind="newTask.DueDate" />
+            </div>
+            <button class="btn-primary" @onclick="CreateTask" disabled="@isCreating">
+                @(isCreating ? "Criando..." : "+ Adicionar Tarefa")
+            </button>
+        </div>
+
+        <div class="tasks-list">
+            <div class="tasks-header">
+                <h3>Suas Tarefas (@tasks.Count)</h3>
+            </div>
+
+            @if (isLoading)
+            {
+                <p class="loading">Carregando tarefas...</p>
+            }
+            else if (tasks.Count == 0)
+            {
+                <div class="empty-state">
+                    <p>Nenhuma tarefa ainda. Crie a primeira! 🚀</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var task in tasks.OrderBy(t => t.IsCompleted).ThenByDescending(t => t.Priority))
+                {
+                    <div class="task-card @(task.IsCompleted ? "completed" : "") priority-@task.Priority">
+                        <div class="task-check">
+                            <input type="checkbox" checked="@task.IsCompleted"
+                                   @onchange="() => ToggleComplete(task)" />
+                        </div>
+                        <div class="task-info">
+                            <h4>@task.Title</h4>
+                            @if (!string.IsNullOrEmpty(task.Description))
+                            {
+                                <p>@task.Description</p>
+                            }
+                            <div class="task-meta">
+                                <span class="badge priority-badge-@task.Priority">
+                                    @(task.Priority == 1 ? "Baixa" : task.Priority == 2 ? "Média" : "Alta")
+                                </span>
+                                @if (task.DueDate.HasValue)
+                                {
+                                    <span class="due-date">📅 @task.DueDate.Value.ToString("dd/MM/yyyy")</span>
+                                }
+                            </div>
+                        </div>
+                        <button class="btn-delete" @onclick="() => DeleteTask(task.Id)">🗑️</button>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<TaskManager.Web.Models.TaskModel> tasks = new();
+    private TaskManager.Web.Models.TaskRequest newTask = new();
+    private bool isLoading = true;
+    private bool isCreating = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthService.IsAuthenticated)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        isLoading = true;
+        tasks = await TaskService.GetTasksAsync();
+        isLoading = false;
+    }
+
+    private async Task CreateTask()
+    {
+        if (string.IsNullOrWhiteSpace(newTask.Title)) return;
+        isCreating = true;
+        await TaskService.CreateTaskAsync(newTask);
+        newTask = new();
+        await LoadTasks();
+        isCreating = false;
+    }
+
+    private async Task ToggleComplete(TaskManager.Web.Models.TaskModel task)
+    {
+        var request = new TaskManager.Web.Models.TaskRequest
+        {
+            Title = task.Title,
+            Description = task.Description,
+            Priority = task.Priority,
+            DueDate = task.DueDate,
+            IsCompleted = !task.IsCompleted
+        };
+        await TaskService.UpdateTaskAsync(task.Id, request);
+        await LoadTasks();
+    }
+
+    private async Task DeleteTask(int id)
+    {
+        await TaskService.DeleteTaskAsync(id);
+        await LoadTasks();
+    }
+
+    private void Logout()
+    {
+        AuthService.Logout();
+        Nav.NavigateTo("/login");
+    }
+}

@@ -1,0 +1,57 @@
+@page "/register"
+@inject TaskManager.Web.Services.AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>🗂️ TaskManager</h2>
+        <p class="subtitle">Crie sua conta</p>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="@(success ? "alert-success" : "alert-error")">@message</div>
+        }
+
+        <div class="form-group">
+            <label>Nome</label>
+            <input type="text" @bind="request.Name" placeholder="Seu nome" />
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" @bind="request.Email" placeholder="seu@email.com" />
+        </div>
+
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" @bind="request.Password" placeholder="••••••••" />
+        </div>
+
+        <button class="btn-primary" @onclick="HandleRegister" disabled="@isLoading">
+            @(isLoading ? "Cadastrando..." : "Cadastrar")
+        </button>
+
+        <p class="link-text">Já tem conta? <a href="/login">Entrar</a></p>
+    </div>
+</div>
+
+@code {
+    private TaskManager.Web.Models.RegisterRequest request = new();
+    private string message = string.Empty;
+    private bool success = false;
+    private bool isLoading = false;
+
+    private async Task HandleRegister()
+    {
+        isLoading = true;
+        message = string.Empty;
+        success = await AuthService.RegisterAsync(request);
+        message = success ? "Conta criada! Redirecionando..." : "Erro ao criar conta.";
+        if (success)
+        {
+            await Task.Delay(1500);
+            Nav.NavigateTo("/login");
+        }
+        isLoading = false;
+    }
+}
