@@ -1,248 +1,75 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* CONTADORES */
+.counters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
 }
 
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #f0f2f5;
+.counter-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    border-top: 4px solid #ccc;
+}
+
+.counter-card.total { border-top-color: #667eea; }
+.counter-card.pending { border-top-color: #f39c12; }
+.counter-card.done { border-top-color: #27ae60; }
+.counter-card.overdue { border-top-color: #e74c3c; }
+
+.counter-number {
+    font-size: 2rem;
+    font-weight: 700;
     color: #1a1a2e;
 }
 
-/* AUTH */
-.auth-container {
-    min-height: 100vh;
+.counter-label {
+    font-size: 0.8rem;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* FILTROS */
+.filters {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
-.auth-card {
+.filter-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
     background: white;
-    padding: 2.5rem;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.2s;
 }
 
-.auth-card h2 {
-    font-size: 1.8rem;
-    text-align: center;
-    margin-bottom: 0.5rem;
+.filter-btn:hover {
+    border-color: #667eea;
     color: #667eea;
 }
 
-.subtitle {
-    text-align: center;
-    color: #888;
-    margin-bottom: 1.5rem;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: #555;
-}
-
-.form-group input,
-.form-group select,
-select, input[type="date"] {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: border-color 0.2s;
-    outline: none;
-}
-
-.form-group input:focus {
-    border-color: #667eea;
-}
-
-.btn-primary {
-    width: 100%;
-    padding: 0.8rem;
+.filter-btn.active {
     background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
     color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 0.5rem;
-    transition: opacity 0.2s;
 }
 
-.btn-primary:hover { opacity: 0.9; }
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.link-text {
-    text-align: center;
-    margin-top: 1rem;
-    color: #888;
-    font-size: 0.9rem;
+/* TAREFA ATRASADA */
+.overdue-card {
+    background: #fff8f8;
 }
 
-.link-text a { color: #667eea; text-decoration: none; font-weight: 600; }
-
-.alert-error {
-    background: #ffe0e0;
-    color: #c0392b;
-    padding: 0.7rem 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+.overdue-text {
+    color: #e74c3c !important;
 }
-
-.alert-success {
-    background: #e0ffe0;
-    color: #27ae60;
-    padding: 0.7rem 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
-
-/* DASHBOARD */
-.dashboard { min-height: 100vh; background: #f0f2f5; }
-
-.dashboard-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-}
-
-.dashboard-header h1 { font-size: 1.5rem; }
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.btn-logout {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.4);
-    padding: 0.4rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.btn-logout:hover { background: rgba(255,255,255,0.3); }
-
-.dashboard-content {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.task-form-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-}
-
-.task-form-card h3 { margin-bottom: 1rem; color: #667eea; }
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.tasks-list { display: flex; flex-direction: column; gap: 0.75rem; }
-
-.tasks-header h3 { color: #555; font-size: 1rem; }
-
-.task-card {
-    background: white;
-    border-radius: 10px;
-    padding: 1rem 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border-left: 4px solid #ccc;
-    transition: transform 0.1s;
-}
-
-.task-card:hover { transform: translateX(3px); }
-.task-card.completed { opacity: 0.6; }
-.task-card.priority-1 { border-left-color: #27ae60; }
-.task-card.priority-2 { border-left-color: #f39c12; }
-.task-card.priority-3 { border-left-color: #e74c3c; }
-
-.task-check input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
-
-.task-info { flex: 1; }
-
-.task-info h4 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-bottom: 0.2rem;
-}
-
-.task-card.completed .task-info h4 { text-decoration: line-through; }
-
-.task-info p { font-size: 0.85rem; color: #888; margin-bottom: 0.4rem; }
-
-.task-meta { display: flex; align-items: center; gap: 0.5rem; }
-
-.badge {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 20px;
-    font-weight: 600;
-}
-
-.priority-badge-1 { background: #d5f5e3; color: #27ae60; }
-.priority-badge-2 { background: #fef9e7; color: #f39c12; }
-.priority-badge-3 { background: #fadbd8; color: #e74c3c; }
-
-.due-date { font-size: 0.8rem; color: #999; }
-
-.btn-delete {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.1rem;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-}
-
-.btn-delete:hover { opacity: 1; }
-
-.empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: #aaa;
-    background: white;
-    border-radius: 12px;
-}
-
-.loading { text-align: center; padding: 2rem; color: #aaa; }

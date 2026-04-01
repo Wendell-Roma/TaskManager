@@ -13,6 +13,28 @@
     </header>
 
     <div class="dashboard-content">
+
+        <!-- CONTADORES -->
+        <div class="counters">
+            <div class="counter-card total">
+                <span class="counter-number">@tasks.Count</span>
+                <span class="counter-label">Total</span>
+            </div>
+            <div class="counter-card pending">
+                <span class="counter-number">@tasks.Count(t => !t.IsCompleted)</span>
+                <span class="counter-label">Pendentes</span>
+            </div>
+            <div class="counter-card done">
+                <span class="counter-number">@tasks.Count(t => t.IsCompleted)</span>
+                <span class="counter-label">Concluídas</span>
+            </div>
+            <div class="counter-card overdue">
+                <span class="counter-number">@tasks.Count(t => !t.IsCompleted && t.DueDate.HasValue && t.DueDate.Value < DateTime.Now)</span>
+                <span class="counter-label">Atrasadas</span>
+            </div>
+        </div>
+
+        <!-- FORMULÁRIO -->
         <div class="task-form-card">
             <h3>Nova Tarefa</h3>
             <div class="form-group">
@@ -34,26 +56,46 @@
             </button>
         </div>
 
+        <!-- FILTROS -->
+        <div class="filters">
+            <button class="filter-btn @(activeFilter == "all" ? "active" : "")" @onclick='() => SetFilter("all")'>
+                Todas
+            </button>
+            <button class="filter-btn @(activeFilter == "pending" ? "active" : "")" @onclick='() => SetFilter("pending")'>
+                Pendentes
+            </button>
+            <button class="filter-btn @(activeFilter == "done" ? "active" : "")" @onclick='() => SetFilter("done")'>
+                Concluídas
+            </button>
+            <button class="filter-btn @(activeFilter == "high" ? "active" : "")" @onclick='() => SetFilter("high")'>
+                🔴 Alta Prioridade
+            </button>
+            <button class="filter-btn @(activeFilter == "overdue" ? "active" : "")" @onclick='() => SetFilter("overdue")'>
+                ⚠️ Atrasadas
+            </button>
+        </div>
+
+        <!-- LISTA -->
         <div class="tasks-list">
             <div class="tasks-header">
-                <h3>Suas Tarefas (@tasks.Count)</h3>
+                <h3>@GetFilterLabel() (@FilteredTasks.Count())</h3>
             </div>
 
             @if (isLoading)
             {
                 <p class="loading">Carregando tarefas...</p>
             }
-            else if (tasks.Count == 0)
+            else if (!FilteredTasks.Any())
             {
                 <div class="empty-state">
-                    <p>Nenhuma tarefa ainda. Crie a primeira! 🚀</p>
+                    <p>Nenhuma tarefa aqui. 🚀</p>
                 </div>
             }
             else
             {
-                @foreach (var task in tasks.OrderBy(t => t.IsCompleted).ThenByDescending(t => t.Priority))
+                @foreach (var task in FilteredTasks)
                 {
-                    <div class="task-card @(task.IsCompleted ? "completed" : "") priority-@task.Priority">
+                    <div class="task-card @(task.IsCompleted ? "completed" : "") priority-@task.Priority @(IsOverdue(task) ? "overdue-card" : "")">
                         <div class="task-check">
                             <input type="checkbox" checked="@task.IsCompleted"
                                    @onchange="() => ToggleComplete(task)" />
@@ -70,7 +112,10 @@
                                 </span>
                                 @if (task.DueDate.HasValue)
                                 {
-                                    <span class="due-date">📅 @task.DueDate.Value.ToString("dd/MM/yyyy")</span>
+                                    <span class="due-date @(IsOverdue(task) ? "overdue-text" : "")">
+                                        📅 @task.DueDate.Value.ToString("dd/MM/yyyy")
+                                        @if (IsOverdue(task)) { <span> ⚠️ Atrasada</span> }
+                                    </span>
                                 }
                             </div>
                         </div>
@@ -87,6 +132,30 @@
     private TaskManager.Web.Models.TaskRequest newTask = new();
     private bool isLoading = true;
     private bool isCreating = false;
+    private string activeFilter = "all";
+
+    private IEnumerable<TaskManager.Web.Models.TaskModel> FilteredTasks => activeFilter switch
+    {
+        "pending" => tasks.Where(t => !t.IsCompleted).OrderByDescending(t => t.Priority),
+        "done" => tasks.Where(t => t.IsCompleted).OrderByDescending(t => t.CreatedAt),
+        "high" => tasks.Where(t => t.Priority == 3 && !t.IsCompleted).OrderByDescending(t => t.DueDate),
+        "overdue" => tasks.Where(t => IsOverdue(t)).OrderBy(t => t.DueDate),
+        _ => tasks.OrderBy(t => t.IsCompleted).ThenByDescending(t => t.Priority)
+    };
+
+    private bool IsOverdue(TaskManager.Web.Models.TaskModel task) =>
+        !task.IsCompleted && task.DueDate.HasValue && task.DueDate.Value < DateTime.Now;
+
+    private void SetFilter(string filter) => activeFilter = filter;
+
+    private string GetFilterLabel() => activeFilter switch
+    {
+        "pending" => "Pendentes",
+        "done" => "Concluídas",
+        "high" => "Alta Prioridade",
+        "overdue" => "Atrasadas",
+        _ => "Todas as Tarefas"
+    };
 
     protected override async Task OnInitializedAsync()
     {
