@@ -44,7 +44,7 @@ O **TaskManager** é uma aplicação web fullstack de gerenciamento de tarefas, 
 
 #### Pré-requisitos
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [PostgreSQL 18](https://www.postgresql.org/download/)
 
 #### 1. Clone o repositório
