@@ -33,8 +33,8 @@ O **TaskManager** é uma aplicação web fullstack de gerenciamento de tarefas, 
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Frontend | Blazor WebAssembly (.NET 9) |
-| Backend | ASP.NET Core Web API (.NET 9) |
+| Frontend | Blazor WebAssembly (.NET 8) |
+| Backend | ASP.NET Core Web API (.NET 8) |
 | Banco de Dados | PostgreSQL 18 |
 | ORM | Entity Framework Core |
 | Autenticação | JWT Bearer Token |
