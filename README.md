@@ -133,8 +133,8 @@ TaskManager/
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Blazor WebAssembly (.NET 9) |
-| Backend | ASP.NET Core Web API (.NET 9) |
+| Frontend | Blazor WebAssembly (.NET 8) |
+| Backend | ASP.NET Core Web API (.NET 8) |
 | Database | PostgreSQL 18 |
 | ORM | Entity Framework Core |
 | Authentication | JWT Bearer Token |
@@ -144,7 +144,7 @@ TaskManager/
 
 #### Prerequisites
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [PostgreSQL 18](https://www.postgresql.org/download/)
 
 #### 1. Clone the repository
