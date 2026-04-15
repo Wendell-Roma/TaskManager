@@ -30,7 +30,6 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost]
-    [HttpPost]
     public async Task<IActionResult> Create([FromBody] TaskRequest request)
     {
     var task = new TaskItem

@@ -1,0 +1,16 @@
+.page[b-m7jrgc6g0f] {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main[b-m7jrgc6g0f] {
+    flex: 1;
+}
+
+.content[b-m7jrgc6g0f] {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
