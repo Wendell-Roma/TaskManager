@@ -19,6 +19,30 @@
 
 O **TaskManager** é uma aplicação web fullstack de gerenciamento de tarefas, desenvolvida com foco em produtividade e organização. Permite criar, organizar, filtrar e acompanhar tarefas com prioridades e prazos.
 
+### 🖼️ Screenshots
+
+<div align="center">
+
+**Tela de Login**
+![Login](docs/login.png)
+
+**Cadastro**
+![Cadastro](docs/register.png)
+
+**Dashboard**
+![Dashboard](docs/dashboard.png)
+
+**Tarefas com destaque de atraso**
+![Tarefas](docs/tasks.png)
+
+**Filtro por Alta Prioridade**
+![Filtro Alta Prioridade](docs/filter-priority.png)
+
+**Filtro por Pendentes**
+![Filtro Pendentes](docs/filter-pending.png)
+
+</div>
+
 ### ✨ Funcionalidades
 
 - 🔐 **Autenticação** — Cadastro e login com JWT
@@ -56,7 +80,13 @@ cd TaskManager
 
 #### 2. Configure o banco de dados
 
-Crie um banco chamado `taskmanager` no PostgreSQL e configure a connection string em `TaskManager.API/appsettings.json`:
+Crie um banco chamado `taskmanager` no PostgreSQL e copie o arquivo de exemplo:
+
+```bash
+cp TaskManager.API/appsettings.Example.json TaskManager.API/appsettings.json
+```
+
+Edite o `appsettings.json` com suas credenciais:
 
 ```json
 {
@@ -69,7 +99,7 @@ Crie um banco chamado `taskmanager` no PostgreSQL e configure a connection strin
 }
 ```
 
-> ⚠️ **Nunca commite o `appsettings.json` com senhas reais!** Use o `appsettings.Example.json` como referência.
+> ⚠️ **Nunca commite o `appsettings.json` com senhas reais!** Ele já está no `.gitignore`.
 
 #### 3. Execute as migrations
 
@@ -100,15 +130,15 @@ O frontend estará disponível em `http://localhost:5028`
 
 ```
 TaskManager/
-├── TaskManager.API/          # Web API (endpoints REST)
-├── TaskManager.Core/         # Entidades e interfaces
+├── TaskManager.API/            # Web API (endpoints REST)
+├── TaskManager.Core/           # Entidades e interfaces
 ├── TaskManager.Infrastructure/ # Repositórios e contexto EF
-└── TaskManager.Web/          # Frontend Blazor WebAssembly
-    ├── Layout/               # Layouts da aplicação
-    ├── Pages/                # Páginas (Login, Register, Tasks)
-    ├── Services/             # AuthService, TaskService
-    ├── Models/               # DTOs e modelos
-    └── wwwroot/              # Arquivos estáticos (CSS, JS)
+└── TaskManager.Web/            # Frontend Blazor WebAssembly
+    ├── Layout/                 # Layouts da aplicação
+    ├── Pages/                  # Páginas (Login, Register, Tasks)
+    ├── Services/               # AuthService, TaskService
+    ├── Models/                 # DTOs e modelos
+    └── wwwroot/                # Arquivos estáticos (CSS, JS)
 ```
 
 ---
@@ -118,6 +148,30 @@ TaskManager/
 ### 📋 About the Project
 
 **TaskManager** is a fullstack web task management application, built with a focus on productivity and organization. It allows you to create, organize, filter, and track tasks with priorities and deadlines.
+
+### 🖼️ Screenshots
+
+<div align="center">
+
+**Login Screen**
+![Login](docs/login.png)
+
+**Register Screen**
+![Register](docs/register.png)
+
+**Dashboard**
+![Dashboard](docs/dashboard.png)
+
+**Tasks with overdue highlight**
+![Tasks](docs/tasks.png)
+
+**High Priority Filter**
+![High Priority Filter](docs/filter-priority.png)
+
+**Pending Filter**
+![Pending Filter](docs/filter-pending.png)
+
+</div>
 
 ### ✨ Features
 
@@ -156,7 +210,13 @@ cd TaskManager
 
 #### 2. Configure the database
 
-Create a database called `taskmanager` in PostgreSQL and set the connection string in `TaskManager.API/appsettings.json`:
+Create a database called `taskmanager` in PostgreSQL and copy the example file:
+
+```bash
+cp TaskManager.API/appsettings.Example.json TaskManager.API/appsettings.json
+```
+
+Edit `appsettings.json` with your credentials:
 
 ```json
 {
@@ -169,7 +229,7 @@ Create a database called `taskmanager` in PostgreSQL and set the connection stri
 }
 ```
 
-> ⚠️ **Never commit `appsettings.json` with real passwords!** Use `appsettings.Example.json` as a reference.
+> ⚠️ **Never commit `appsettings.json` with real passwords!** It's already in `.gitignore`.
 
 #### 3. Run migrations
 
